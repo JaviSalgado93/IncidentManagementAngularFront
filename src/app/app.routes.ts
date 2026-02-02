@@ -1,14 +1,8 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-  // Redirect raíz a login (por ahora)
-  {
-    path: '',
-    redirectTo: '/login',
-    pathMatch: 'full'
-  },
-
-  // Rutas públicas (sin autenticación)
+  // ========== RUTAS PÚBLICAS (sin autenticación) ==========
   {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
@@ -18,26 +12,33 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
   },
 
-  // Rutas privadas (requieren autenticación - lo implementaremos en Fase 2)
+  // ========== RUTAS PRIVADAS (requieren autenticación) ==========
   {
     path: 'dashboard',
     loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
-    // canActivate: [authGuard]  // Lo agregaremos en Fase 2
+    canActivate: [authGuard]
   },
   {
     path: 'profile',
     loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent),
-    // canActivate: [authGuard]
+    canActivate: [authGuard]
   },
   {
     path: 'incidents',
-    loadChildren: () => import('./features/incidents/incidents.routes').then(m => m.INCIDENT_ROUTES)
-    // canActivate: [authGuard]
+    loadChildren: () => import('./features/incidents/incidents.routes').then(m => m.INCIDENT_ROUTES),
+    canActivate: [authGuard]
   },
 
-  // Ruta 404
+  // ========== REDIRECT RAÍZ ==========
+  {
+    path: '',
+    redirectTo: 'login',  // ← Redirigir a login en vez de dashboard
+    pathMatch: 'full'
+  },
+
+  // ========== RUTA 404 ==========
   {
     path: '**',
-    redirectTo: '/login'
+    redirectTo: 'login'  // ← Redirigir a login en vez de dashboard
   }
 ];
