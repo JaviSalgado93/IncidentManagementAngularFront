@@ -1,0 +1,23 @@
+@use './variables' as vars;
+
+// Clases helper de spacing
+.m-0 { margin: 0 !important; }
+.mt-1 { margin-top: vars.$spacing-sm !important; }
+.mb-1 { margin-bottom: vars.$spacing-sm !important; }
+.mt-2 { margin-top: vars.$spacing-md !important; }
+.mb-2 { margin-bottom: vars.$spacing-md !important; }
+.mt-3 { margin-top: vars.$spacing-lg !important; }
+.mb-3 { margin-bottom: vars.$spacing-lg !important; }
+
+.p-0 { padding: 0 !important; }
+.p-1 { padding: vars.$spacing-sm !important; }
+.p-2 { padding: vars.$spacing-md !important; }
+.p-3 { padding: vars.$spacing-lg !important; }
+
+// Layout helpers
+.full-width { width: 100% !important; }
+.text-center { text-align: center !important; }
+.d-flex { display: flex !important; }
+.flex-column { flex-direction: column !important; }
+.justify-center { justify-content: center !important; }
+.align-center { align-items: center !important; }

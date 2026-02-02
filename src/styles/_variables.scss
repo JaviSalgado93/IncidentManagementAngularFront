@@ -1,0 +1,40 @@
+// Colores principales
+$color-primary: #3f51b5;  // Indigo
+$color-accent: #0288d1;   // Light Blue
+$color-warn: #c62828;     // Red
+$color-success: #388e3c;  // Green
+$color-info: #1976d2;     // Blue
+
+// Estados de incidentes
+$status-new: #1976d2;
+$status-progress: #f57c00;
+$status-resolved: #388e3c;
+$status-closed: #616161;
+
+// Prioridades
+$priority-low: #4caf50;
+$priority-medium: #ff9800;
+$priority-high: #f44336;
+
+// Spacing (Material Design 8px grid)
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 48px;
+
+// Breakpoints
+$breakpoint-mobile: 600px;
+$breakpoint-tablet: 960px;
+$breakpoint-desktop: 1280px;
+
+// Exportar variables (para usar en otros archivos)
+:export {
+  colorPrimary: $color-primary;
+  colorAccent: $color-accent;
+  statusNew: $status-new;
+  statusProgress: $status-progress;
+  statusResolved: $status-resolved;
+  statusClosed: $status-closed;
+}
