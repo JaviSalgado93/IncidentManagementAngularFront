@@ -19,6 +19,7 @@ import { RegisterRequest } from '../../../core/models';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,

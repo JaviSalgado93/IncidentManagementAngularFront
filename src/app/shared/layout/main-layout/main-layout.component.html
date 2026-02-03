@@ -1,0 +1,29 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar (menú lateral) -->
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="!(isHandset$ | async)">
+
+    <app-sidebar></app-sidebar>
+  </mat-sidenav>
+
+  <!-- Contenido principal -->
+  <mat-sidenav-content>
+    <!-- Navbar superior -->
+    <app-navbar [drawer]="drawer"></app-navbar>
+
+    <!-- Contenido dinámico (Dashboard, Incidents, Profile, etc) -->
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+
+    <!-- Footer (opcional) -->
+    <footer class="footer">
+      <p>&copy; 2026 Incident Management. Todos los derechos reservados.</p>
+    </footer>
+  </mat-sidenav-content>
+</mat-sidenav-container>
