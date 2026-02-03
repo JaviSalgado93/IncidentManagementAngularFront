@@ -1,0 +1,185 @@
+<div class="incident-list-container">
+  <div class="list-header">
+    <h1>Incidentes</h1>
+    <button mat-raised-button color="primary" (click)="createIncident()">
+      <mat-icon>add</mat-icon>
+      Nuevo Incidente
+    </button>
+  </div>
+
+  <mat-card class="filters-card">
+    <div class="filters-container">
+      <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+        <mat-label>Buscar</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+          placeholder="Título o descripción">
+        <mat-icon matPrefix>search</mat-icon>
+        <button
+          *ngIf="searchTerm"
+          matSuffix
+          mat-icon-button
+          (click)="searchTerm = ''; onSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Estado</mat-label>
+        <mat-select [(ngModel)]="selectedStatusId" (selectionChange)="onFilterChange()">
+          <mat-option value="">Todos</mat-option>
+          <mat-option *ngFor="let status of statuses" [value]="status.name">
+            {{ status.displayName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Prioridad</mat-label>
+        <mat-select [(ngModel)]="selectedPriority" (selectionChange)="onFilterChange()">
+          <mat-option value="">Todas</mat-option>
+          <mat-option *ngFor="let priority of priorities" [value]="priority.name">
+            {{ priority.displayName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="category-field" subscriptSizing="dynamic">
+        <mat-label>Categoría</mat-label>
+        <mat-select [(ngModel)]="selectedCategoryId" (selectionChange)="onFilterChange()">
+          <mat-option value="">Todas</mat-option>
+          <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button (click)="onSearch()">
+        <mat-icon>search</mat-icon>
+        Buscar
+      </button>
+      <button mat-button (click)="clearFilters()">
+        <mat-icon>clear</mat-icon>
+        Limpiar
+      </button>
+    </div>
+  </mat-card>
+
+  <app-loading-spinner *ngIf="loading" message="Cargando incidentes..."></app-loading-spinner>
+
+  <app-error-message
+    *ngIf="error && !loading"
+    [message]="error"
+    (retry)="loadIncidents()">
+  </app-error-message>
+
+  <mat-card *ngIf="!loading && !error" class="table-card">
+    <app-empty-state
+      *ngIf="incidents.length === 0"
+      icon="bug_report"
+      title="No hay incidentes"
+      message="No se encontraron incidentes con los filtros seleccionados."
+      actionText="Crear Incidente"
+      (action)="createIncident()">
+    </app-empty-state>
+
+    <div *ngIf="incidents.length > 0" class="table-container">
+      <table mat-table [dataSource]="incidents" class="incidents-table">
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Título</th>
+          <td mat-cell *matCellDef="let incident">
+            <div class="title-cell">
+              <span class="title-text">{{ incident.title }}</span>
+              <span class="description-text">{{ incident.description | slice:0:50 }}{{ incident.description.length > 50 ? '...' : '' }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let incident">
+            <app-status-badge
+              [status]="incident.statusId.toString()"
+              [statusName]="incident.statusName">
+            </app-status-badge>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="priority">
+          <th mat-header-cell *matHeaderCellDef>Prioridad</th>
+          <td mat-cell *matCellDef="let incident">
+            <app-priority-chip
+              [priority]="incident.priority"
+              [priorityName]="incident.priorityName"
+              [priorityColor]="incident.priorityColor">
+            </app-priority-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>Categoría</th>
+          <td mat-cell *matCellDef="let incident">
+            <mat-chip
+              [style.background-color]="incident.categoryId ? getCategoryColor(incident.categoryId) : '#808080'"
+              [style.color]="'#ffffff'">
+              {{ incident.categoryName || 'Sin categoría' }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef>Reportado por</th>
+          <td mat-cell *matCellDef="let incident">{{ incident.userName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Creado</th>
+          <td mat-cell *matCellDef="let incident">{{ formatDate(incident.createdAt) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let incident">
+            <div class="actions-cell">
+              <button
+                mat-icon-button
+                matTooltip="Ver detalle"
+                (click)="viewIncident(incident.id)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Editar"
+                (click)="editIncident(incident.id)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Eliminar"
+                color="warn"
+                (click)="deleteIncident(incident)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+      </table>
+
+      <mat-paginator
+        [length]="totalCount"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="pageNumber - 1"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+
+  </mat-card>
+</div>

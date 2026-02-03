@@ -1,16 +1,17 @@
 // Enums para estados y prioridades
 export enum IncidentStatus {
-  Open = 'Open',
-  InProgress = 'InProgress',
-  Resolved = 'Resolved',
-  Closed = 'Closed'
+  Open = 'OPEN',
+  InProgress = 'IN_PROGRESS',
+  Resolved = 'RESOLVED',
+  Closed = 'CLOSED'
 }
 
 export enum IncidentPriority {
-  Low = 'Low',
-  Medium = 'Medium',
-  High = 'High',
-  Critical = 'Critical'
+  VeryLow = 1,
+  Low = 2,
+  Medium = 3,
+  High = 4,
+  Critical = 5
 }
 
 // Interfaz principal del Incident
@@ -18,20 +19,28 @@ export interface Incident {
   id: string;
   title: string;
   description: string;
-  status: IncidentStatus;
-  priority: IncidentPriority;
-  reportedBy: string;
-  assignedTo?: string;
+  userId: string;
+  userName: string;
+  categoryId: string;
+  categoryName: string;
+  statusId: number;
+  statusName: string;
+  priority: number;
+  priorityName: string;
+  priorityColor: string;
   createdAt: string;
   updatedAt: string;
-  resolvedAt?: string;
+  closedAt: string | null;
+  commentCount: number;
+  attachmentCount: number;
 }
 
 // DTO para crear incidente
 export interface CreateIncidentRequest {
   title: string;
   description: string;
-  priority: IncidentPriority;
+  priority: number;
+  categoryId: string;
   assignedTo?: string;
 }
 
@@ -39,22 +48,22 @@ export interface CreateIncidentRequest {
 export interface UpdateIncidentRequest {
   title?: string;
   description?: string;
-  status?: IncidentStatus;
-  priority?: IncidentPriority;
+  statusId?: number;
+  priority?: number;
+  categoryId?: string;
   assignedTo?: string;
 }
 
 // Parámetros de filtrado
 export interface IncidentFilterParams {
-  status?: IncidentStatus;
-  priority?: IncidentPriority;
-  assignedTo?: string;
-  reportedBy?: string;
-  searchTerm?: string;
-  pageNumber?: number;
-  pageSize?: number;
-  sortBy?: string;
-  sortDirection?: 'asc' | 'desc';
+  Title?: string;
+  StatusId?: number;
+  Priority?: number;
+  CategoryId?: string;
+  PageNumber?: number;
+  PageSize?: number;
+  SortBy?: string;
+  SortOrder?: string;
 }
 
 // Respuesta paginada
@@ -64,4 +73,6 @@ export interface PaginatedIncidents {
   pageNumber: number;
   pageSize: number;
   totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
 }

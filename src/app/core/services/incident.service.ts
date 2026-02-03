@@ -7,8 +7,11 @@ import {
   CreateIncidentRequest,
   UpdateIncidentRequest,
   IncidentFilterParams,
-  PaginatedIncidents,
-  ApiResponse
+  ApiResponse,
+  PaginatedApiResponse,
+  Category,
+  IncidentStatusInfo,
+  PriorityInfo
 } from '../models';
 
 @Injectable({
@@ -16,95 +19,50 @@ import {
 })
 export class IncidentService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/incidents`;
+  private apiUrl = `${environment.apiUrl}/Incident`;
 
-  // ========== CRUD BÁSICO ==========
-
-  /**
-   * Obtener todos los incidentes (con paginación y filtros)
-   */
-  getIncidents(filters?: IncidentFilterParams): Observable<ApiResponse<PaginatedIncidents>> {
+  getIncidents(filters?: IncidentFilterParams): Observable<PaginatedApiResponse<Incident>> {
     let params = new HttpParams();
 
     if (filters) {
-      if (filters.status) params = params.set('status', filters.status);
-      if (filters.priority) params = params.set('priority', filters.priority);
-      if (filters.assignedTo) params = params.set('assignedTo', filters.assignedTo);
-      if (filters.reportedBy) params = params.set('reportedBy', filters.reportedBy);
-      if (filters.searchTerm) params = params.set('searchTerm', filters.searchTerm);
-      if (filters.pageNumber) params = params.set('pageNumber', filters.pageNumber.toString());
-      if (filters.pageSize) params = params.set('pageSize', filters.pageSize.toString());
-      if (filters.sortBy) params = params.set('sortBy', filters.sortBy);
-      if (filters.sortDirection) params = params.set('sortDirection', filters.sortDirection);
+      if (filters.Title) params = params.set('Title', filters.Title);
+      if (filters.StatusId) params = params.set('StatusId', filters.StatusId.toString());
+      if (filters.Priority) params = params.set('Priority', filters.Priority.toString());
+      if (filters.CategoryId) params = params.set('CategoryId', filters.CategoryId);
+      if (filters.PageNumber) params = params.set('PageNumber', filters.PageNumber.toString());
+      if (filters.PageSize) params = params.set('PageSize', filters.PageSize.toString());
+      if (filters.SortBy) params = params.set('SortBy', filters.SortBy);
+      if (filters.SortOrder) params = params.set('SortOrder', filters.SortOrder);
     }
 
-    return this.http.get<ApiResponse<PaginatedIncidents>>(this.apiUrl, { params });
+    return this.http.get<PaginatedApiResponse<Incident>>(`${this.apiUrl}/search`, { params });
   }
 
-  /**
-   * Obtener un incidente por ID
-   */
   getIncidentById(id: string): Observable<ApiResponse<Incident>> {
     return this.http.get<ApiResponse<Incident>>(`${this.apiUrl}/${id}`);
   }
 
-  /**
-   * Crear nuevo incidente
-   */
   createIncident(incident: CreateIncidentRequest): Observable<ApiResponse<Incident>> {
     return this.http.post<ApiResponse<Incident>>(this.apiUrl, incident);
   }
 
-  /**
-   * Actualizar incidente existente
-   */
   updateIncident(id: string, incident: UpdateIncidentRequest): Observable<ApiResponse<Incident>> {
     return this.http.put<ApiResponse<Incident>>(`${this.apiUrl}/${id}`, incident);
   }
 
-  /**
-   * Eliminar incidente
-   */
   deleteIncident(id: string): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
   }
 
-  // ========== OPERACIONES ADICIONALES ==========
-
-  /**
-   * Obtener incidentes del usuario actual
-   */
-  getMyIncidents(filters?: IncidentFilterParams): Observable<ApiResponse<PaginatedIncidents>> {
-    let params = new HttpParams();
-
-    if (filters) {
-      if (filters.status) params = params.set('status', filters.status);
-      if (filters.priority) params = params.set('priority', filters.priority);
-      if (filters.pageNumber) params = params.set('pageNumber', filters.pageNumber.toString());
-      if (filters.pageSize) params = params.set('pageSize', filters.pageSize.toString());
-    }
-
-    return this.http.get<ApiResponse<PaginatedIncidents>>(`${this.apiUrl}/my-incidents`, { params });
+  getCategories(): Observable<ApiResponse<Category[]>> {
+    return this.http.get<ApiResponse<Category[]>>(`${this.apiUrl}/categories`);
   }
 
-  /**
-   * Cambiar estado de un incidente
-   */
-  updateStatus(id: string, status: string): Observable<ApiResponse<Incident>> {
-    return this.http.patch<ApiResponse<Incident>>(`${this.apiUrl}/${id}/status`, { status });
+  getStatuses(): Observable<ApiResponse<IncidentStatusInfo[]>> {
+    return this.http.get<ApiResponse<IncidentStatusInfo[]>>(`${this.apiUrl}/statuses`);
   }
 
-  /**
-   * Asignar incidente a un usuario
-   */
-  assignIncident(id: string, userId: string): Observable<ApiResponse<Incident>> {
-    return this.http.patch<ApiResponse<Incident>>(`${this.apiUrl}/${id}/assign`, { userId });
-  }
-
-  /**
-   * Obtener estadísticas de incidentes
-   */
-  getStatistics(): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/statistics`);
+  getPriorities(): Observable<ApiResponse<PriorityInfo[]>> {
+    return this.http.get<ApiResponse<PriorityInfo[]>>(`${this.apiUrl}/priorities`);
   }
 }
