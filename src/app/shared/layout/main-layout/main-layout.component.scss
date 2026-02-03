@@ -1,3 +1,5 @@
+@use '../../../../styles/variables' as vars;
+
 .sidenav-container {
   height: 100vh;
   //display: flex;
@@ -5,7 +7,7 @@
 
 .sidenav {
   width: 260px;
-  background-color: #263238;
+  background-color: vars.$color-sidebar;
   color: white;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
 }
@@ -26,7 +28,7 @@
 }
 
 .footer {
-  background-color: #263238;
+  background-color: vars.$color-sidebar;
   color: rgba(255, 255, 255, 0.9);
   padding: 1rem;
   text-align: center;
