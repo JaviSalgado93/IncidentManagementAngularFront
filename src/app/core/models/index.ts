@@ -1,4 +1,7 @@
-// Exportar todos los modelos desde un solo lugar
-export * from './user.model';
+// Auth models
 export * from './auth.model';
+export * from './user.model';
 export * from './api-response.model';
+
+// Incident models
+export * from './incident.model';
