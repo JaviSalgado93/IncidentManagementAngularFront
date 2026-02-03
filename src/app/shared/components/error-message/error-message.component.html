@@ -1,0 +1,13 @@
+<div class="error-message">
+  <mat-icon class="error-icon">error_outline</mat-icon>
+  <p class="error-text">{{ message }}</p>
+
+  <button
+    *ngIf="showRetry"
+    mat-raised-button
+    color="primary"
+    (click)="onRetry()">
+    <mat-icon>refresh</mat-icon>
+    {{ retryText }}
+  </button>
+</div>

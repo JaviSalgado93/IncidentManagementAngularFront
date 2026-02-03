@@ -1,0 +1,32 @@
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  background-color: #ffebee;
+  border-radius: 8px;
+  border: 1px solid #ef9a9a;
+
+  .error-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    color: #d32f2f;
+    margin-bottom: 1rem;
+  }
+
+  .error-text {
+    margin: 0 0 1rem 0;
+    font-size: 0.95rem;
+    color: #c62828;
+    max-width: 400px;
+  }
+
+  button {
+    mat-icon {
+      margin-right: 0.5rem;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+<!-- Spinner con overlay (cubre toda la pantalla) -->
+<div *ngIf="overlay" class="spinner-overlay">
+  <div class="spinner-container">
+    <mat-spinner [diameter]="diameter"></mat-spinner>
+    <p class="spinner-message">{{ message }}</p>
+  </div>
+</div>
+
+<!-- Spinner inline (dentro de un componente) -->
+<div *ngIf="!overlay" class="spinner-inline">
+  <mat-spinner [diameter]="diameter"></mat-spinner>
+  <p class="spinner-message">{{ message }}</p>
+</div>
