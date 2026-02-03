@@ -1,24 +1,23 @@
-<div class="confirm-dialog">
-  <div class="dialog-header" [ngClass]="'type-' + type">
-    <mat-icon class="dialog-icon">{{ getIcon() }}</mat-icon>
-    <h2 mat-dialog-title>{{ title }}</h2>
-  </div>
-
-  <mat-dialog-content class="dialog-content">
-    <p>{{ message }}</p>
-  </mat-dialog-content>
-
-  <mat-dialog-actions align="end" class="dialog-actions">
-    <button
-      mat-button
-      (click)="onCancel()">
-      {{ cancelText }}
-    </button>
-    <button
-      mat-raised-button
-      [color]="type === 'danger' ? 'warn' : 'primary'"
-      (click)="onConfirm()">
-      {{ confirmText }}
-    </button>
-  </mat-dialog-actions>
+<div class="dialog-header" [ngClass]="'header-' + data.type">
+  <mat-icon>{{ getIcon() }}</mat-icon>
+  <h2>{{ data.title }}</h2>
 </div>
+
+<mat-dialog-content class="dialog-content">
+  <p class="dialog-message">{{ data.message }}</p>
+  <div *ngIf="data.details" class="dialog-details">
+    <strong>{{ data.details }}</strong>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions" align="end">
+  <button mat-button [mat-dialog-close]="false">
+    {{ data.cancelText || 'Cancelar' }}
+  </button>
+  <button
+    mat-raised-button
+    [color]="data.type === 'danger' ? 'warn' : 'primary'"
+    [mat-dialog-close]="true">
+    {{ data.confirmText || 'Confirmar' }}
+  </button>
+</mat-dialog-actions>

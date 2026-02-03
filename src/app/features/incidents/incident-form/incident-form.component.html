@@ -1,0 +1,120 @@
+<div class="incident-form-container">
+  <div class="form-header">
+    <button mat-icon-button (click)="cancel()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{ isEditMode ? 'Editar Incidente' : 'Nuevo Incidente' }}</h1>
+  </div>
+
+  <app-loading-spinner
+    *ngIf="loading && !incidentForm.value.title"
+    message="Cargando incidente...">
+  </app-loading-spinner>
+
+  <app-error-message
+    *ngIf="error && !loading"
+    [message]="error"
+    (retry)="ngOnInit()">
+  </app-error-message>
+
+  <mat-card *ngIf="!loading || incidentForm.value.title" class="form-card">
+    <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()">
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Título</mat-label>
+        <input
+          matInput
+          formControlName="title"
+          placeholder="Ej: Error en el módulo de pagos"
+          maxlength="200">
+        <mat-hint align="end">{{ incidentForm.get('title')?.value?.length || 0 }}/200</mat-hint>
+        <mat-error *ngIf="hasError('title')">
+          {{ getErrorMessage('title') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descripción</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          rows="6"
+          placeholder="Describe el incidente en detalle..."
+          maxlength="2000">
+        </textarea>
+        <mat-hint align="end">{{ incidentForm.get('description')?.value?.length || 0 }}/2000</mat-hint>
+        <mat-error *ngIf="hasError('description')">
+          {{ getErrorMessage('description') }}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Prioridad</mat-label>
+          <mat-select formControlName="priority" [disabled]="loadingCatalogs">
+            <mat-option
+              *ngFor="let priority of priorities"
+              [value]="priority.value">
+              {{ priority.displayName }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasError('priority')">
+            {{ getErrorMessage('priority') }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Categoría</mat-label>
+          <mat-select formControlName="categoryId" [disabled]="loadingCatalogs">
+            <mat-option
+              *ngFor="let category of categories"
+              [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasError('categoryId')">
+            {{ getErrorMessage('categoryId') }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="isEditMode">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="statusId" [disabled]="loadingCatalogs">
+            <mat-option
+              *ngFor="let status of statuses"
+              [value]="status.id">
+              {{ status.displayName }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasError('statusId')">
+            {{ getErrorMessage('statusId') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button
+          mat-button
+          type="button"
+          (click)="cancel()"
+          [disabled]="loading">
+          Cancelar
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="loading || loadingCatalogs">
+          <mat-spinner
+            *ngIf="loading"
+            diameter="20"
+            class="button-spinner">
+          </mat-spinner>
+          <span *ngIf="!loading">
+            {{ isEditMode ? 'Actualizar' : 'Crear' }} Incidente
+          </span>
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

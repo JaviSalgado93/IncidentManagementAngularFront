@@ -86,6 +86,7 @@ export class IncidentListComponent implements OnInit {
   categories: Category[] = [];
   statuses: IncidentStatusInfo[] = [];
   priorities: PriorityInfo[] = [];
+  snackBar: any;
 
   ngOnInit(): void {
     this.loadCatalogs();
@@ -189,9 +190,15 @@ export class IncidentListComponent implements OnInit {
 
   deleteIncident(incident: Incident): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '500px',
+      maxWidth: '90vw',
+      autoFocus: false,
+      restoreFocus: false,
+      panelClass: 'custom-dialog-container',
       data: {
         title: '¿Eliminar incidente?',
-        message: `¿Estás seguro de que deseas eliminar "${incident.title}"? Esta acción no se puede deshacer.`,
+        message: '¿Estás seguro de que deseas eliminar este incidente? Esta acción no se puede deshacer.',
+        details: incident.title,
         confirmText: 'Eliminar',
         cancelText: 'Cancelar',
         type: 'danger'
@@ -204,7 +211,16 @@ export class IncidentListComponent implements OnInit {
         this.incidentService.deleteIncident(incident.id).subscribe({
           next: (response) => {
             if (response.success) {
-              this.loadIncidents();
+              // En incident-list, recargar la lista
+              // En incident-detail, navegar a /incidents
+              this.router.navigate(['/incidents']);
+
+              this.snackBar.open('✅ Incidente eliminado exitosamente', 'Cerrar', {
+                duration: 3000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                panelClass: ['success-snackbar']
+              });
             } else {
               this.error = response.message || 'Error al eliminar incidente';
               this.loading = false;

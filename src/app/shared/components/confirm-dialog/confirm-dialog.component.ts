@@ -1,15 +1,16 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 export interface ConfirmDialogData {
   title: string;
   message: string;
+  details?: string;
   confirmText?: string;
   cancelText?: string;
-  type?: 'info' | 'warning' | 'danger';
+  type?: 'danger' | 'warning' | 'info';
 }
 
 @Component({
@@ -25,29 +26,18 @@ export interface ConfirmDialogData {
   styleUrl: './confirm-dialog.component.scss'
 })
 export class ConfirmDialogComponent {
-  data: ConfirmDialogData = inject(MAT_DIALOG_DATA);
-  dialogRef = inject(MatDialogRef<ConfirmDialogComponent>);
-
-  // Valores por defecto
-  title = this.data.title;
-  message = this.data.message;
-  confirmText = this.data.confirmText || 'Confirmar';
-  cancelText = this.data.cancelText || 'Cancelar';
-  type = this.data.type || 'info';
+  constructor(@Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData) {}
 
   getIcon(): string {
-    switch (this.type) {
-      case 'warning': return 'warning';
-      case 'danger': return 'error';
-      default: return 'info';
+    switch (this.data.type) {
+      case 'danger':
+        return 'warning';
+      case 'warning':
+        return 'error_outline';
+      case 'info':
+        return 'info';
+      default:
+        return 'help_outline';
     }
-  }
-
-  onConfirm(): void {
-    this.dialogRef.close(true);
-  }
-
-  onCancel(): void {
-    this.dialogRef.close(false);
   }
 }

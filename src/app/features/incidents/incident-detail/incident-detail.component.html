@@ -1,0 +1,139 @@
+<div class="incident-detail-container">
+  <app-loading-spinner *ngIf="loading" message="Cargando incidente..."></app-loading-spinner>
+
+  <app-error-message
+    *ngIf="error && !loading"
+    [message]="error"
+    (retry)="ngOnInit()">
+  </app-error-message>
+
+  <div *ngIf="incident && !loading && !error" class="detail-content">
+    <div class="detail-header">
+      <button mat-icon-button (click)="goBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ incident.title }}</h1>
+      <div class="header-actions">
+        <button mat-raised-button color="primary" (click)="editIncident()">
+          <mat-icon>edit</mat-icon>
+          Editar
+        </button>
+        <button mat-raised-button color="warn" (click)="deleteIncident(incident)">
+          <mat-icon>delete</mat-icon>
+          Eliminar
+        </button>
+      </div>
+    </div>
+
+    <mat-card class="detail-card">
+      <div class="detail-grid">
+        <div class="detail-section full-width">
+          <h2>Información General</h2>
+          <mat-divider></mat-divider>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Estado</label>
+              <div>
+                <app-status-badge
+                  [status]="incident.statusId.toString()"
+                  [statusName]="incident.statusName">
+                </app-status-badge>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <label>Prioridad</label>
+              <div>
+                <app-priority-chip
+                  [priority]="incident.priority"
+                  [priorityName]="incident.priorityName"
+                  [priorityColor]="incident.priorityColor">
+                </app-priority-chip>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <label>Categoría</label>
+              <div>
+                <mat-chip
+                  [style.background-color]="incident.priorityColor || '#808080'"
+                  [style.color]="'#ffffff'">
+                  {{ incident.categoryName || 'Sin categoría' }}
+                </mat-chip>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <label>Reportado por</label>
+              <div class="user-info">
+                <mat-icon>person</mat-icon>
+                <span>{{ incident.userName }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section full-width">
+          <h2>Descripción</h2>
+          <mat-divider></mat-divider>
+          <p class="description">{{ incident.description }}</p>
+        </div>
+
+        <div class="detail-section">
+          <h2>Fechas</h2>
+          <mat-divider></mat-divider>
+
+          <div class="dates-grid">
+            <div class="date-item">
+              <mat-icon>schedule</mat-icon>
+              <div>
+                <label>Creado</label>
+                <span>{{ formatDate(incident.createdAt) }}</span>
+              </div>
+            </div>
+
+            <div class="date-item">
+              <mat-icon>update</mat-icon>
+              <div>
+                <label>Última actualización</label>
+                <span>{{ formatDate(incident.updatedAt) }}</span>
+              </div>
+            </div>
+
+            <div class="date-item" *ngIf="incident.closedAt">
+              <mat-icon>check_circle</mat-icon>
+              <div>
+                <label>Cerrado</label>
+                <span>{{ formatDate(incident.closedAt) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Estadísticas</h2>
+          <mat-divider></mat-divider>
+
+          <div class="stats-grid">
+            <div class="stat-item">
+              <mat-icon>comment</mat-icon>
+              <div>
+                <span class="stat-number">{{ incident.commentCount }}</span>
+                <label>Comentarios</label>
+              </div>
+            </div>
+
+            <div class="stat-item">
+              <mat-icon>attach_file</mat-icon>
+              <div>
+                <span class="stat-number">{{ incident.attachmentCount }}</span>
+                <label>Adjuntos</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
