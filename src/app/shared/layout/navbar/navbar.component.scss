@@ -1,100 +1,56 @@
-@use '../../../../styles/variables' as vars;
-
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.navbar-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-left: 1rem;
 }
 
-.menu-button {
-  margin-right: 1rem;
-
-  // Ocultar en desktop
-  @media (min-width: 960px) {
-    display: none;
-  }
+.navbar-spacer {
+  flex: 1 1 auto;
 }
 
-.logo-section {
+.user-button {
+  margin-left: 0.5rem;
+}
+
+.user-menu-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
+  gap: 1rem;
+  padding: 1rem 1rem 0.5rem 1rem;
+  background-color: #f5f5f5;
 
-  .logo-icon {
-    font-size: 1.75rem;
-    width: 1.75rem;
-    height: 1.75rem;
+  .user-avatar {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: rgba(0, 0, 0, 0.54);
   }
 
-  .app-title {
-    font-size: 1.25rem;
-    font-weight: 500;
+  .user-info {
+    flex: 1;
+    min-width: 0;
 
-    // Ocultar en mobile pequeño
-    @media (max-width: 599px) {
-      display: none;
-    }
-  }
-}
-
-.spacer {
-  flex: 1;
-}
-
-.user-section {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  .user-name {
-    font-size: 0.875rem;
-    font-weight: 500;
-
-    // Ocultar en mobile
-    @media (max-width: 959px) {
-      display: none;
-    }
-  }
-}
-
-// Estilos del menú de usuario
-::ng-deep {
-  .user-menu-header {
-    padding: 1rem;
-    background-color: #f5f5f5;
-
-    .user-menu-name {
-      margin: 0 0 0.25rem 0;
-      font-weight: 500;
-      font-size: 0.95rem;
-    }
-
-    .user-menu-email {
+    .user-name {
       margin: 0;
-      font-size: 0.75rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.87);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .user-email {
+      margin: 0;
+      font-size: 0.875rem;
       color: rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }
 
-// Estilos para navbar
-.navbar-purple {
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-}
-
-.navbar-indigo-dark {
-  background-color: #3949ab;
-  color: white;
-}
-
-.navbar-teal {
-  background-color: #00796b;
-  color: white;
-}
-
-.navbar-blue-dark {
-  background-color: #1a237e;
-  color: white;
+::ng-deep .mat-mdc-menu-content {
+  padding: 0 !important;
 }

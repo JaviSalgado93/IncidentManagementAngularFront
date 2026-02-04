@@ -1,61 +1,47 @@
-<!-- Version Original del NavBar -->
-<!-- <mat-toolbar color="primary" class="navbar"> -->
-<!-- || -->
-
-<!-- Version navbar navbar-indigo-dark (ME VA GUSTANDO)-->
-<!-- <mat-toolbar class="navbar navbar-indigo-dark"> -->
-
-<!-- Version navbar navbar-teal (ES VERDE) -->
-<!-- <mat-toolbar class="navbar navbar-teal"> -->
-
-<!-- Version navbar navbar-blue-dark -->
-<mat-toolbar class="navbar navbar-blue-dark">
-
-  <!-- Botón hamburguesa (solo en mobile) -->
-  <button
-    mat-icon-button
-    class="menu-button"
-    (click)="toggleSidebar()"
-    aria-label="Toggle menu">
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="toggleSidebar()">
     <mat-icon>menu</mat-icon>
   </button>
 
-  <!-- Logo y título -->
-  <div class="logo-section">
-    <mat-icon class="logo-icon">bug_report</mat-icon>
-    <span class="app-title">Incident Management</span>
-  </div>
+  <span class="navbar-title">Sistema de Incidentes</span>
 
-  <!-- Spacer (empuja contenido a la derecha) -->
-  <span class="spacer"></span>
+  <span class="navbar-spacer"></span>
 
-  <!-- Usuario y menú -->
-  <div class="user-section" *ngIf="currentUser$ | async as user">
-    <!-- Nombre del usuario (oculto en mobile) -->
-    <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
+  <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-button">
+    <mat-icon>account_circle</mat-icon>
+  </button>
 
-    <!-- Menú de usuario -->
-    <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="User menu">
-      <mat-icon>account_circle</mat-icon>
+  <mat-menu #userMenu="matMenu" xPosition="before">
+    <div class="user-menu-header">
+      <mat-icon class="user-avatar">account_circle</mat-icon>
+      <div class="user-info">
+        <p class="user-name">{{ currentUser?.fullName || currentUser?.firstName + ' ' + currentUser?.lastName || 'Usuario' }}</p>
+        <p class="user-email">{{ currentUser?.email || '' }}</p>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <button mat-menu-item (click)="goToProfile()">
+      <mat-icon>person</mat-icon>
+      <span>Mi Perfil</span>
     </button>
 
-    <mat-menu #userMenu="matMenu">
-      <div class="user-menu-header">
-        <p class="user-menu-name">{{ user.firstName }} {{ user.lastName }}</p>
-        <p class="user-menu-email">{{ user.email }}</p>
-      </div>
+    <button mat-menu-item [routerLink]="['/profile/edit']">
+      <mat-icon>edit</mat-icon>
+      <span>Editar Perfil</span>
+    </button>
 
-      <mat-divider></mat-divider>
+    <button mat-menu-item [routerLink]="['/profile/change-password']">
+      <mat-icon>lock</mat-icon>
+      <span>Cambiar Contraseña</span>
+    </button>
 
-      <button mat-menu-item (click)="goToProfile()">
-        <mat-icon>person</mat-icon>
-        <span>Mi Perfil</span>
-      </button>
+    <mat-divider></mat-divider>
 
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        <span>Cerrar Sesión</span>
-      </button>
-    </mat-menu>
-  </div>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Cerrar Sesión</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>

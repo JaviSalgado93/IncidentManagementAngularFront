@@ -4,10 +4,11 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
+  fullName: string;
   role: string;
   isActive: boolean;
   createdAt: Date;
-  lastAccess?: Date;
+  lastAccess?: string; // Era Date, de momento queda en string
 }
 
 export interface UserInfo {
@@ -16,5 +17,6 @@ export interface UserInfo {
   email: string;
   firstName: string;
   lastName: string;
+  fullName?: string;
   role: string;
 }

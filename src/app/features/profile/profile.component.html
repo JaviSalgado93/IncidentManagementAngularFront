@@ -1,0 +1,91 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>Mi Perfil</h1>
+  </div>
+
+  <app-loading-spinner *ngIf="loading" message="Cargando perfil..."></app-loading-spinner>
+
+  <app-error-message
+    *ngIf="error && !loading"
+    [message]="error"
+    (retry)="loadUserProfile()">
+  </app-error-message>
+
+  <div *ngIf="user && !loading && !error" class="profile-content">
+    <mat-card class="profile-card">
+      <div class="profile-info">
+        <div class="avatar-section">
+          <div class="avatar">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+          <mat-chip [style.background-color]="getRoleBadgeColor()" [style.color]="'#ffffff'">
+            <mat-icon>{{ getRoleIcon() }}</mat-icon>
+            {{ user.role }}
+          </mat-chip>
+        </div>
+
+        <div class="user-details">
+          <h2>{{ user.fullName }}</h2>
+          <p class="username">@{{ user.username }}</p>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <mat-icon>email</mat-icon>
+              <div>
+                <label>Correo electrónico</label>
+                <span>{{ user.email }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>badge</mat-icon>
+              <div>
+                <label>Nombre</label>
+                <span>{{ user.firstName }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>badge</mat-icon>
+              <div>
+                <label>Apellido</label>
+                <span>{{ user.lastName }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>access_time</mat-icon>
+              <div>
+                <label>Último acceso</label>
+                <span>{{ formatDate(user.lastAccess || "" ) }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>fingerprint</mat-icon>
+              <div>
+                <label>ID de usuario</label>
+                <span class="user-id">{{ user.id }}</span>
+              </div>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="actions">
+            <button mat-raised-button color="primary" (click)="editProfile()">
+              <mat-icon>edit</mat-icon>
+              Editar Perfil
+            </button>
+            <button mat-raised-button (click)="changePassword()">
+              <mat-icon>lock</mat-icon>
+              Cambiar Contraseña
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

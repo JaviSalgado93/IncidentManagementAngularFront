@@ -32,6 +32,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent)
       },
       {
+        path: 'profile/edit',
+        loadComponent: () => import('./features/profile/edit-profile/edit-profile.component').then(m => m.EditProfileComponent)
+      },
+      {
+        path: 'profile/change-password',
+        loadComponent: () => import('./features/profile/change-password/change-password.component').then(m => m.ChangePasswordComponent)
+      },
+      {
         path: 'incidents',
         loadChildren: () => import('./features/incidents/incidents.routes').then(m => m.INCIDENT_ROUTES)
       }

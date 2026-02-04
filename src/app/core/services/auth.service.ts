@@ -13,7 +13,7 @@ import {
   UpdateUserProfileRequest
 } from '../models/auth.model';
 import { ApiResponse } from '../models/api-response.model';
-import { UserInfo } from '../models/user.model';
+import { UserInfo, User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -114,6 +114,33 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+    // ========== GET CURRENT USER ==========
+  getUserProfile(): Observable<ApiResponse<User>> {
+    return this.http.get<ApiResponse<User>>(`${this.apiUrl}/me`)
+      .pipe(
+        tap(response => {
+          if (response.success && response.data) {
+            // Actualizar el BehaviorSubject con la info completa
+            const userInfo: UserInfo = {
+              id: response.data.id,
+              username: response.data.username,
+              email: response.data.email,
+              firstName: response.data.firstName,
+              lastName: response.data.lastName,
+              fullName: response.data.fullName,
+              role: response.data.role
+            };
+            this.tokenService.saveUserInfo(userInfo);
+            this.currentUserSubject.next(userInfo);
+          }
+        }),
+        catchError(error => {
+          console.error('Get user profile error:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
   // ========== CHANGE PASSWORD ==========
   changePassword(request: ChangePasswordRequest): Observable<ApiResponse<void>> {
     return this.http.post<ApiResponse<void>>(`${this.apiUrl}/change-password`, request)
@@ -127,15 +154,12 @@ export class AuthService {
 
   // ========== UPDATE PROFILE ==========
   updateProfile(request: UpdateUserProfileRequest): Observable<ApiResponse<void>> {
-    return this.http.put<ApiResponse<void>>(`${this.apiUrl}/update-profile`, request)
+    return this.http.put<ApiResponse<void>>(`${this.apiUrl}/profile`, request)  // ← Cambio de endpoint
       .pipe(
-        tap(() => {
-          // Actualizar user info en localStorage
-          const currentUser = this.currentUserSubject.value;
-          if (currentUser) {
-            const updatedUser = { ...currentUser, ...request };
-            this.tokenService.saveUserInfo(updatedUser);
-            this.currentUserSubject.next(updatedUser);
+        tap(response => {
+          if (response.success) {
+            // Recargar perfil completo después de actualizar
+            this.getUserProfile().subscribe();
           }
         }),
         catchError(error => {

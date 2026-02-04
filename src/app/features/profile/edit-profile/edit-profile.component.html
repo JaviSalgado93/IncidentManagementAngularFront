@@ -1,0 +1,87 @@
+<div class="edit-profile-container">
+  <div class="edit-header">
+    <button mat-icon-button (click)="cancel()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Editar Perfil</h1>
+  </div>
+
+  <app-loading-spinner
+    *ngIf="loadingProfile"
+    message="Cargando perfil...">
+  </app-loading-spinner>
+
+  <app-error-message
+    *ngIf="error && !loading && !loadingProfile"
+    [message]="error"
+    (retry)="loadUserProfile()">
+  </app-error-message>
+
+  <mat-card *ngIf="!loadingProfile" class="edit-card">
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Correo electrónico</mat-label>
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="ejemplo@correo.com">
+        <mat-icon matPrefix>email</mat-icon>
+        <mat-error *ngIf="hasError('email')">
+          {{ getErrorMessage('email') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre</mat-label>
+        <input
+          matInput
+          formControlName="firstName"
+          placeholder="Tu nombre"
+          maxlength="50">
+        <mat-icon matPrefix>badge</mat-icon>
+        <mat-hint align="end">{{ profileForm.get('firstName')?.value?.length || 0 }}/50</mat-hint>
+        <mat-error *ngIf="hasError('firstName')">
+          {{ getErrorMessage('firstName') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Apellido</mat-label>
+        <input
+          matInput
+          formControlName="lastName"
+          placeholder="Tu apellido"
+          maxlength="50">
+        <mat-icon matPrefix>badge</mat-icon>
+        <mat-hint align="end">{{ profileForm.get('lastName')?.value?.length || 0 }}/50</mat-hint>
+        <mat-error *ngIf="hasError('lastName')">
+          {{ getErrorMessage('lastName') }}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button
+          mat-button
+          type="button"
+          (click)="cancel()"
+          [disabled]="loading">
+          Cancelar
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="loading || profileForm.invalid">
+          <mat-spinner
+            *ngIf="loading"
+            diameter="20"
+            class="button-spinner">
+          </mat-spinner>
+          <span *ngIf="!loading">Guardar Cambios</span>
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>
