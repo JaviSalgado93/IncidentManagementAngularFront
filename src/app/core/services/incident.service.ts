@@ -96,4 +96,19 @@ export class IncidentService {
         })
       );
   }
+
+  // ============ MY INCIDENTS (DASHBOARD) ============
+
+  /**
+   * Obtener incidentes del usuario actual
+   */
+  getMyIncidents(): Observable<ApiResponse<Incident[]>> {
+    return this.http.get<ApiResponse<Incident[]>>(`${this.apiUrl}/user/mine`)
+      .pipe(
+        catchError(error => {
+          console.error('Error getting my incidents:', error);
+          return throwError(() => error);
+        })
+      );
+  }
 }

@@ -1,0 +1,52 @@
+<mat-card class="recent-incidents-card">
+  <div class="card-header">
+    <h3>
+      <mat-icon>schedule</mat-icon>
+      Incidentes Recientes
+    </h3>
+    <button mat-button color="primary" (click)="viewAllIncidents()">
+      Ver todos
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div *ngIf="incidents.length === 0" class="empty-state">
+    <mat-icon>inbox</mat-icon>
+    <p>No tienes incidentes registrados</p>
+    <button mat-raised-button color="primary" [routerLink]="['/incidents/new']">
+      <mat-icon>add</mat-icon>
+      Crear Incidente
+    </button>
+  </div>
+
+  <mat-list *ngIf="incidents.length > 0">
+    <mat-list-item
+      *ngFor="let incident of incidents; let last = last"
+      class="incident-item"
+      (click)="viewIncident(incident.id)">
+
+      <div class="incident-content">
+        <div class="incident-header">
+          <h4 class="incident-title">{{ incident.title }}</h4>
+          <span class="incident-date">{{ formatDate(incident.createdAt) }}</span>
+        </div>
+
+        <div class="incident-meta">
+          <app-status-badge [status]="incident.statusName"></app-status-badge>
+          <app-priority-chip [priority]="incident.priority"></app-priority-chip>
+
+          <div class="incident-category">
+            <mat-icon>category</mat-icon>
+            <span>{{ incident.categoryName }}</span>
+          </div>
+        </div>
+      </div>
+
+      <mat-icon class="nav-icon">chevron_right</mat-icon>
+
+      <mat-divider *ngIf="!last"></mat-divider>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
