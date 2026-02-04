@@ -1,0 +1,25 @@
+<div class="update-item">
+  <div class="update-icon" [style.background-color]="getUpdateIconColor()">
+    <mat-icon>{{ getUpdateIcon() }}</mat-icon>
+  </div>
+
+  <div class="update-content">
+    <div class="update-header">
+      <span class="author-name">{{ update.authorName }}</span>
+      <span class="update-type">{{ getUpdateTitle() }}</span>
+      <span class="update-date">{{ formatDate(update.createdAt) }}</span>
+    </div>
+
+    <!-- COMENTARIO -->
+    <div *ngIf="isComment() && update.comment" class="update-comment">
+      <p>{{ update.comment }}</p>
+    </div>
+
+    <!-- CAMBIO DE VALOR -->
+    <div *ngIf="hasChange()" class="update-change">
+      <mat-chip class="old-value">{{ update.oldValue }}</mat-chip>
+      <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+      <mat-chip class="new-value">{{ update.newValue }}</mat-chip>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ export * from './api-response.model';
 
 // Incident models
 export * from './incident.model';
+export * from './incident-update.model';
 export * from './category.model';
 export * from './status.model';
 export * from './priority.model';

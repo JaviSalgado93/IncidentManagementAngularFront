@@ -1,0 +1,52 @@
+<div class="update-list-container">
+  <div class="update-list-header">
+    <h3>
+      <mat-icon>history</mat-icon>
+      Historial de Actividad
+    </h3>
+    <mat-chip-set>
+      <mat-chip
+        [highlighted]="selectedFilter === 'all'"
+        (click)="setFilter('all')">
+        Todos ({{ totalUpdates }})
+      </mat-chip>
+      <mat-chip
+        [highlighted]="selectedFilter === 'comments'"
+        (click)="setFilter('comments')">
+        <mat-icon>comment</mat-icon>
+        Comentarios ({{ totalComments }})
+      </mat-chip>
+      <mat-chip
+        [highlighted]="selectedFilter === 'changes'"
+        (click)="setFilter('changes')">
+        <mat-icon>swap_horiz</mat-icon>
+        Cambios ({{ totalChanges }})
+      </mat-chip>
+    </mat-chip-set>
+  </div>
+
+  <app-loading-spinner
+    *ngIf="loading"
+    message="Cargando historial...">
+  </app-loading-spinner>
+
+  <app-error-message
+    *ngIf="error && !loading"
+    [message]="error"
+    (retry)="loadUpdates()">
+  </app-error-message>
+
+  <div *ngIf="!loading && !error" class="update-list-content">
+    <div *ngIf="filteredUpdates.length === 0" class="empty-state">
+      <mat-icon>inbox</mat-icon>
+      <p>No hay {{ selectedFilter === 'all' ? 'actividad' : selectedFilter === 'comments' ? 'comentarios' : 'cambios' }} todavía</p>
+    </div>
+
+    <div *ngIf="filteredUpdates.length > 0" class="updates-timeline">
+      <app-update-item
+        *ngFor="let update of filteredUpdates; trackBy: trackByUpdateId"
+        [update]="update">
+      </app-update-item>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 
 import { IncidentService } from '../../../core/services/incident.service';
@@ -17,6 +19,8 @@ import {
   StatusBadgeComponent,
   PriorityChipComponent
 } from '../../../shared/components';
+import { UpdateListComponent } from '../components/update-list/update-list.component';
+import { CommentFormComponent } from '../components/comment-form/comment-form.component';
 
 @Component({
   selector: 'app-incident-detail',
@@ -28,10 +32,14 @@ import {
     MatIconModule,
     MatChipsModule,
     MatDividerModule,
+    MatTabsModule,
+    MatMenuModule,
     LoadingSpinnerComponent,
     ErrorMessageComponent,
     StatusBadgeComponent,
-    PriorityChipComponent
+    PriorityChipComponent,
+    UpdateListComponent,
+    CommentFormComponent
   ],
   templateUrl: './incident-detail.component.html',
   styleUrl: './incident-detail.component.scss'
@@ -41,6 +49,8 @@ export class IncidentDetailComponent implements OnInit {
   private router = inject(Router);
   private incidentService = inject(IncidentService);
   private dialog = inject(MatDialog);
+  selectedTab = 0;
+  @ViewChild('updateList') updateList!: UpdateListComponent;
 
   incident: Incident | null = null;
   loading = false;
@@ -84,6 +94,12 @@ export class IncidentDetailComponent implements OnInit {
   editIncident(): void {
     if (this.incident) {
       this.router.navigate(['/incidents', this.incident.id, 'edit']);
+    }
+  }
+
+  confirmDelete(): void {
+    if (this.incident) {
+      this.deleteIncident(this.incident);
     }
   }
 
@@ -152,5 +168,12 @@ export class IncidentDetailComponent implements OnInit {
       month: 'short',
       day: 'numeric'
     });
+  }
+
+  onCommentAdded(): void {
+    // Recargar las actualizaciones cuando se agregue un comentario
+    if (this.updateList) {
+      this.updateList.onUpdateAdded();
+    }
   }
 }

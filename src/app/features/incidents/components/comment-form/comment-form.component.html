@@ -1,0 +1,39 @@
+<div class="comment-form-container">
+  <div class="form-header">
+    <mat-icon>add_comment</mat-icon>
+    <h4>Agregar Comentario</h4>
+  </div>
+
+  <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Escribe tu comentario</mat-label>
+      <textarea
+        matInput
+        formControlName="comment"
+        placeholder="Describe lo que quieres comentar..."
+        rows="4"
+        maxlength="1000">
+      </textarea>
+      <mat-hint align="end">{{ getCharacterCount() }}/1000</mat-hint>
+      <mat-error *ngIf="hasError()">
+        {{ getErrorMessage() }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="loading || commentForm.invalid">
+        <mat-spinner
+          *ngIf="loading"
+          diameter="20"
+          class="button-spinner">
+        </mat-spinner>
+        <mat-icon *ngIf="!loading">send</mat-icon>
+        <span *ngIf="!loading">Enviar Comentario</span>
+      </button>
+    </div>
+  </form>
+</div>

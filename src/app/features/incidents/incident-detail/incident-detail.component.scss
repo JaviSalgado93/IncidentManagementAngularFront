@@ -4,6 +4,24 @@
   padding: 1rem;
 }
 
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  .back-button {
+    flex-shrink: 0;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.87);
+  }
+}
+
 .detail-content {
   animation: fadeIn 0.3s ease-in;
 }
@@ -19,119 +37,79 @@
   }
 }
 
-.detail-header {
+.detail-tabs {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .tab-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+.tab-content {
+  padding: 1.5rem;
+}
+
+.incident-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.incident-header {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem;
   gap: 1rem;
-  margin-bottom: 1.5rem;
 
-  .back-button {
-    flex-shrink: 0;
-  }
-
-  h1 {
+  .title-section {
     flex: 1;
-    margin: 0;
-    font-size: 1.75rem;
-    font-weight: 400;
-    color: rgba(0, 0, 0, 0.87);
-  }
 
-  .header-actions {
-    display: flex;
-    gap: 0.5rem;
+    h2 {
+      margin: 0 0 1rem 0;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.87);
+    }
 
-    button {
-      mat-icon {
-        margin-right: 0.5rem;
-      }
+    .badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
     }
   }
+
+  .actions {
+    flex-shrink: 0;
+  }
 }
 
-.detail-card {
-  padding: 2rem;
-}
-
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-}
-
-.detail-section {
+.incident-body {
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-
-  &.full-width {
-    grid-column: 1 / -1;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: rgba(0, 0, 0, 0.87);
-  }
-
-  mat-divider {
-    margin-bottom: 0.5rem;
-  }
+  gap: 1.5rem;
 }
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
 }
 
 .info-item {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-
-  label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: rgba(0, 0, 0, 0.6);
-  }
-
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: rgba(0, 0, 0, 0.87);
-
-    mat-icon {
-      color: rgba(0, 0, 0, 0.54);
-    }
-  }
-}
-
-.description {
-  margin: 0;
-  line-height: 1.6;
-  color: rgba(0, 0, 0, 0.87);
-  white-space: pre-wrap;
-}
-
-.dates-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.date-item {
-  display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
 
   mat-icon {
     color: rgba(0, 0, 0, 0.54);
+    margin-top: 0.25rem;
   }
 
   div {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -143,72 +121,62 @@
     }
 
     span {
+      font-size: 1rem;
       color: rgba(0, 0, 0, 0.87);
     }
   }
 }
 
-.stats-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  mat-icon {
-    color: rgba(0, 0, 0, 0.54);
-  }
-
-  div {
+.description-section {
+  h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87);
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    align-items: center;
+    gap: 0.5rem;
 
-    .stat-number {
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: rgba(0, 0, 0, 0.87);
+    mat-icon {
+      color: rgba(0, 0, 0, 0.54);
     }
+  }
 
-    label {
-      font-size: 0.875rem;
-      color: rgba(0, 0, 0, 0.6);
-    }
+  .description-text {
+    margin: 0;
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.87);
+    white-space: pre-wrap;
+    word-break: break-word;
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 3px solid #3f51b5;
   }
 }
 
-@media (max-width: 959px) {
+@media (max-width: 768px) {
   .detail-header {
-    flex-wrap: wrap;
-
     h1 {
-      flex-basis: 100%;
-      order: 2;
+      font-size: 1.5rem;
     }
+  }
 
-    .back-button {
-      order: 1;
-    }
+  .incident-header {
+    flex-direction: column;
 
-    .header-actions {
-      order: 3;
-      flex-basis: 100%;
-
-      button {
-        flex: 1;
+    .title-section {
+      h2 {
+        font-size: 1.25rem;
       }
     }
   }
 
-  .detail-grid {
+  .info-grid {
     grid-template-columns: 1fr;
   }
 
-  .info-grid {
-    grid-template-columns: 1fr;
+  .tab-content {
+    padding: 1rem;
   }
 }

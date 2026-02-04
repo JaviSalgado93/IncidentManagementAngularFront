@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   Incident,
@@ -11,7 +11,10 @@ import {
   PaginatedApiResponse,
   Category,
   IncidentStatusInfo,
-  PriorityInfo
+  PriorityInfo,
+  IncidentUpdateResponse,
+  AddCommentRequest,
+  IncidentUpdate
 } from '../models';
 
 @Injectable({
@@ -64,5 +67,33 @@ export class IncidentService {
 
   getPriorities(): Observable<ApiResponse<PriorityInfo[]>> {
     return this.http.get<ApiResponse<PriorityInfo[]>>(`${this.apiUrl}/priorities`);
+  }
+
+  // ============ UPDATES & COMMENTS ============
+
+  /**
+   * Obtener todas las actualizaciones de un incidente
+   */
+  getIncidentUpdates(incidentId: string): Observable<ApiResponse<IncidentUpdate[]>> {
+    return this.http.get<ApiResponse<IncidentUpdate[]>>(`${this.apiUrl}/${incidentId}/updates`)
+      .pipe(
+        catchError(error => {
+          console.error('Error getting incident updates:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  /**
+   * Agregar un comentario a un incidente
+   */
+  addComment(incidentId: string, request: AddCommentRequest): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(`${this.apiUrl}/${incidentId}/comments`, request)
+      .pipe(
+        catchError(error => {
+          console.error('Error adding comment:', error);
+          return throwError(() => error);
+        })
+      );
   }
 }
